@@ -8,4 +8,10 @@ return [
     'success_message' => 'Content has been translated successfully.',
     'error_title' => 'Error!',
     'error_message' => 'Content could not be translated.',
+    'multiple' => [
+        'label' => 'DeepL',
+        'modal' => [
+            'heading' => 'Overwrite all translations',
+        ],
+    ],
 ];

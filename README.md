@@ -1,13 +1,11 @@
-# This is my package filament-deepl-translations
+# Filament DeepL translations
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/concept7/filament-deepl-translations.svg?style=flat-square)](https://packagist.org/packages/concept7/filament-deepl-translations)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/concept7/filament-deepl-translations/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/concept7/filament-deepl-translations/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/concept7/filament-deepl-translations/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/concept7/filament-deepl-translations/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/concept7/filament-deepl-translations.svg?style=flat-square)](https://packagist.org/packages/concept7/filament-deepl-translations)
 
-The package heavily depends on the Spatie Translatable packages
-
--   https://filamentphp.com/plugins/filament-spatie-translatable
+_The package heavily depends on the [Spatie Translatable packages](https://filamentphp.com/plugins/filament-spatie-translatable)_
 
 ## Installation
 
@@ -35,11 +33,33 @@ And add DEEPL_API_KEY to your .env
 
 ## Usage
 
+### Option #1: Live update on the input fields in place
+
 ```php
 RichEditor::make('body')
     ->label('Body')
     ->translatable() // add this line to make field translatable. That's it!
     ->required(),
+```
+
+### Option #2: Bulk update database records
+
+If you would like to bulk update records then theres a BulkAction in place:
+
+```php
+use Concept7\FilamentDeeplTranslations\Actions\DeeplBulkTranslatableAction;
+
+    ->bulkActions([
+        DeeplBulkTranslatableAction::make(),
+    ])
+```
+
+Make sure you add the Deepl Trait to the corresponding models.
+
+```php
+use Concept7\FilamentDeeplTranslations\Traits\Deepl;
+
+use Deepl;
 ```
 
 ## Changelog

@@ -38,7 +38,7 @@ class DeeplTranslatableAction
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.source'))
                                 ->options(fn () => $langs->toArray())
                                 ->live()
-                                ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) use ($fieldName, $model, $activeLocale) {
+                                ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) use ($fieldName, $model, $activeLocale): void {
 
                                     $sourceText = $model->getTranslation($fieldName, $state);
                                     $set($fieldName.'_original', $sourceText);
@@ -57,7 +57,7 @@ class DeeplTranslatableAction
                                 ->live(),
                             ($component::class)::make($fieldName.'_translated'),
                         ])
-                        ->action(function (array $data) use ($component, $fieldName) {
+                        ->action(function (array $data) use ($component, $fieldName): void {
                             $component->state($data[$fieldName.'_translated']);
                         });
                 }
