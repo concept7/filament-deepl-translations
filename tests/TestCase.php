@@ -2,9 +2,9 @@
 
 namespace Concept7\FilamentDeeplTranslations\Tests;
 
+use Concept7\FilamentDeeplTranslations\FilamentDeeplTranslationsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Concept7\FilamentDeeplTranslations\FilamentDeeplTranslationsServiceProvider;
 
 class TestCase extends Orchestra
 {
