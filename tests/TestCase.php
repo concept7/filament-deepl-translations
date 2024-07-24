@@ -2,9 +2,9 @@
 
 namespace Concept7\FilamentDeeplTranslations\Tests;
 
+use Concept7\FilamentDeeplTranslations\FilamentDeeplTranslationsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Concept7\FilamentDeeplTranslations\FilamentDeeplTranslationsServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -24,13 +24,5 @@ class TestCase extends Orchestra
         ];
     }
 
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_filament-deepl-translations_table.php.stub';
-        $migration->up();
-        */
-    }
+    public function getEnvironmentSetUp($app) {}
 }
