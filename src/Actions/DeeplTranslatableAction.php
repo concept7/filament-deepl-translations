@@ -33,7 +33,9 @@ class DeeplTranslatableAction
                         ->icon('heroicon-o-language')
                         ->label(__('filament-deepl-translations::filament-deepl-translations.modal_title'))
                         ->form([
-                            Placeholder::make('activeLocale')->content(locale_get_display_name($activeLocale, config('app.locale'))),
+                            Placeholder::make('activeLocale')
+                                ->label(__('filament-deepl-translations::filament-deepl-translations.active_locale'))
+                                ->content(locale_get_display_name($activeLocale, config('app.locale'))),
                             Select::make('source')
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.source'))
                                 ->options(fn () => $langs->toArray())

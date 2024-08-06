@@ -4,6 +4,7 @@ return [
     'translate' => 'Translate',
     'modal_title' => 'Translate with DeepL',
     'source' => 'Source Language',
+    'active_locale' => 'Current language',
     'success_title' => 'Success!',
     'success_message' => 'Content has been translated successfully.',
     'error_title' => 'Error!',
