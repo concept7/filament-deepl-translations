@@ -49,15 +49,21 @@ class DeeplTranslatableAction
                                     $result = $translator->translateText(
                                         $sourceText,
                                         $get('source'),
-                                        $activeLocale === 'en' ? 'en-US' : $activeLocale
+                                        $activeLocale === 'en' ? 'en-US' : $activeLocale,
+                                        [
+                                            'tag_handling' => 'html',
+                                        ]
                                     );
+
                                     $set($fieldName.'_translated', $result->text);
                                 }),
 
                             ($component::class)::make($fieldName.'_original')
+                                ->label(__('filament-deepl-translations::filament-deepl-translations.original_field', ['field' => __($fieldName)]))
                                 ->disabled()
                                 ->live(),
-                            ($component::class)::make($fieldName.'_translated'),
+                            ($component::class)::make($fieldName.'_translated')
+                                ->label(__('filament-deepl-translations::filament-deepl-translations.translated_field', ['field' => __($fieldName)])),
                         ])
                         ->action(function (array $data) use ($component, $fieldName): void {
                             $component->state($data[$fieldName.'_translated']);
