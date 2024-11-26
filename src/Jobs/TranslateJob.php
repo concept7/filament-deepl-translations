@@ -2,6 +2,7 @@
 
 namespace Concept7\FilamentDeeplTranslations\Jobs;
 
+use Concept7\FilamentDeeplTranslations\Events\RecordLanguageUpdatedEvent;
 use DeepL\Translator;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,5 +42,7 @@ class TranslateJob implements ShouldQueue
         }
 
         $this->record->save();
+
+        event(new RecordLanguageUpdatedEvent($this->record, $this->targetLanguage));
     }
 }
