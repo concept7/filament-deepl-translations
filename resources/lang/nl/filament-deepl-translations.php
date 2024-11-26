@@ -4,6 +4,7 @@ return [
     'translate' => 'Vertalen',
     'modal_title' => 'Vertalen met DeepL',
     'source' => 'Originele taal',
+    'target' => 'Doel taal',
     'active_locale' => 'Huidige taal',
     'original_field' => 'Originele veld: :field',
     'translated_field' => 'Vertaalde veld: :field',
@@ -15,6 +16,9 @@ return [
         'label' => 'Vertalen met DeepL',
         'modal' => [
             'heading' => 'Overschrijf alle vertalingen',
+        ],
+        'notifications' => [
+            'title' => 'Content is verzonden naar DeepL en worden in de achtergrond verwerkt.',
         ],
     ],
 ];

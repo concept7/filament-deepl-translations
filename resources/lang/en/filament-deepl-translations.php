@@ -4,6 +4,7 @@ return [
     'translate' => 'Translate',
     'modal_title' => 'Translate with DeepL',
     'source' => 'Source Language',
+    'target' => 'Target Language',
     'active_locale' => 'Current language',
     'original_field' => 'Original field: :field',
     'translated_field' => 'Translated field: :field',
@@ -15,6 +16,9 @@ return [
         'label' => 'Translate with DeepL',
         'modal' => [
             'heading' => 'Overwrite all translations',
+        ],
+        'notifications' => [
+            'title' => 'Content sent to DeepL and will be processed in the background.',
         ],
     ],
 ];
