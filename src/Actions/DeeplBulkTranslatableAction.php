@@ -2,9 +2,9 @@
 
 namespace Concept7\FilamentDeeplTranslations\Actions;
 
-use App\Filament\Components\Select;
 use Concept7\FilamentDeeplTranslations\Jobs\BatchTranslateJob;
 use Filament\Actions\Concerns\CanCustomizeProcess;
+use Filament\Forms\Components\Select;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
