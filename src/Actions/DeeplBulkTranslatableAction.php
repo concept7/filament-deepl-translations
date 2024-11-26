@@ -2,10 +2,11 @@
 
 namespace Concept7\FilamentDeeplTranslations\Actions;
 
+use App\Filament\Components\Select;
+use Concept7\FilamentDeeplTranslations\Jobs\BatchTranslateJob;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 
 class DeeplBulkTranslatableAction extends BulkAction
@@ -25,9 +26,7 @@ class DeeplBulkTranslatableAction extends BulkAction
 
         $this->modalHeading(fn (): string => __('filament-deepl-translations::filament-deepl-translations.multiple.modal.heading', ['label' => $this->getPluralModelLabel()]));
 
-        $this->modalSubmitActionLabel(__('filament-deepl-translations::filament-deepl-translations.multiple.modal.actions.deepl.label'));
-
-        $this->successNotificationTitle(__('filament-deepl-translations::filament-deepl-translations.multiple.notifications.deepl.title'));
+        $this->successNotificationTitle(__('filament-deepl-translations::filament-deepl-translations.multiple.notifications.title'));
 
         $this->color('info');
 
@@ -37,9 +36,26 @@ class DeeplBulkTranslatableAction extends BulkAction
 
         $this->modalIcon(FilamentIcon::resolve('actions::deepl-action.modal') ?? 'heroicon-o-x-mark');
 
-        $this->action(function (): void {
-            $this->process(function (Collection $records, Table $table): void {
-                $records->each(fn ($record) => $record->deeplTranslate());
+        $this->form(function ($livewire) {
+            $activeLocale = $livewire->activeLocale;
+            $langs = collect(config('app.locales'))
+                ->mapWithKeys(fn (string $lang) => [$lang => $lang])
+                ->map(fn (string $lang) => locale_get_display_name($lang, config('app.locale')));
+
+            return [
+                Select::make('source')
+                    ->label(__('filament-deepl-translations::filament-deepl-translations.active_locale'))
+                    ->default($activeLocale)
+                    ->options($langs),
+                Select::make('target')
+                    ->label(__('filament-deepl-translations::filament-deepl-translations.target'))
+                    ->options($langs),
+            ];
+        });
+
+        $this->action(function (array $data): void {
+            $this->process(function (Collection $records) use ($data): void {
+                BatchTranslateJob::dispatch($records, $data['source'], $data['target']);
             });
 
             $this->success();

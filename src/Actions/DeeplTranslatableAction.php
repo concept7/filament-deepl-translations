@@ -15,7 +15,9 @@ class DeeplTranslatableAction
     public static function make(): void
     {
         Field::macro('translatable', function () {
-            $langs = collect(config('app.locales'))->mapWithKeys(fn ($lang) => [$lang => $lang])->map(fn ($lang) => locale_get_display_name($lang, config('app.locale')));
+            $langs = collect(config('app.locales'))
+                ->mapWithKeys(fn (string $lang) => [$lang => $lang])
+                ->map(fn (string $lang) => locale_get_display_name($lang, config('app.locale')));
 
             return $this->hintAction(
                 function (Field $component, $livewire) use ($langs) {
