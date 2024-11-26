@@ -19,6 +19,7 @@ class DeeplTranslatableAction
                 ->mapWithKeys(fn (string $lang) => [$lang => $lang])
                 ->map(fn (string $lang) => locale_get_display_name($lang, config('app.locale')));
 
+            /** @var \Filament\Forms\Components\Field $this */
             return $this->hintAction(
                 function (Field $component, $livewire) use ($langs) {
                     $fieldName = $component->getName();
