@@ -35,7 +35,7 @@ class TranslateJob implements ShouldQueue
 
             if (filled($texts)) {
                 $result = $translator->translateText(
-                    $this->record->getTranslation($field, $this->sourceLanguage),
+                    $texts,
                     $this->sourceLanguage,
                     $this->targetLanguage === 'en' ? 'en-US' : $this->targetLanguage
                 );
