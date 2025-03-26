@@ -31,13 +31,17 @@ class TranslateJob implements ShouldQueue
         $fields = $this->record->translatable;
 
         foreach ($fields as $field) {
-            $result = $translator->translateText(
-                $this->record->getTranslation($field, $this->sourceLanguage),
-                $this->sourceLanguage,
-                $this->targetLanguage === 'en' ? 'en-US' : $this->targetLanguage
-            );
-            if (filled($result->text)) {
-                $this->record->setTranslation($field, $this->targetLanguage, $result->text);
+            $texts = $this->record->getTranslation($field, $this->sourceLanguage);
+
+            if (filled($texts)) {
+                $result = $translator->translateText(
+                    $this->record->getTranslation($field, $this->sourceLanguage),
+                    $this->sourceLanguage,
+                    $this->targetLanguage === 'en' ? 'en-US' : $this->targetLanguage
+                );
+                if (filled($result->text)) {
+                    $this->record->setTranslation($field, $this->targetLanguage, $result->text);
+                }
             }
         }
 
