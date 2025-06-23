@@ -5,6 +5,7 @@ namespace Concept7\FilamentDeeplTranslations\Jobs;
 use Concept7\FilamentDeeplTranslations\Events\RecordLanguageUpdatedEvent;
 use DeepL\AppInfo;
 use DeepL\DeepLClient;
+use DeepL\TranslateTextOptions;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -39,7 +40,10 @@ class TranslateJob implements ShouldQueue
                 $result = $translator->translateText(
                     $texts,
                     $this->sourceLanguage,
-                    $this->targetLanguage === 'en' ? 'en-US' : $this->targetLanguage
+                    $this->targetLanguage === 'en' ? 'en-US' : $this->targetLanguage,
+                    [
+                        TranslateTextOptions::TAG_HANDLING => 'html',
+                    ]
                 );
                 if (filled($result->text)) {
                     $this->record->setTranslation($field, $this->targetLanguage, $result->text);
