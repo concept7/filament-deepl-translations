@@ -17,6 +17,7 @@ class FilamentDeeplTranslationsServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('filament-deepl-translations')
+            ->hasConfigFile()
             ->hasTranslations();
     }
 
