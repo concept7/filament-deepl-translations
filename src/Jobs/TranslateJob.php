@@ -3,7 +3,7 @@
 namespace Concept7\FilamentDeeplTranslations\Jobs;
 
 use Concept7\FilamentDeeplTranslations\Events\RecordLanguageUpdatedEvent;
-use DeepL\Translator;
+use DeepL\DeepLClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +26,6 @@ class TranslateJob implements ShouldQueue
 
     public function handle()
     {
-        $translator = new Translator(config('services.deepl.api_key'));
 
         $fields = $this->record->translatable;
 
@@ -34,6 +33,7 @@ class TranslateJob implements ShouldQueue
             $texts = $this->record->getTranslation($field, $this->sourceLanguage);
 
             if (filled($texts)) {
+                $translator = new DeepLClient(config('services.deepl.api_key'));
                 $result = $translator->translateText(
                     $texts,
                     $this->sourceLanguage,

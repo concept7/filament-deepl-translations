@@ -2,14 +2,12 @@
 
 namespace Concept7\FilamentDeeplTranslations\Traits;
 
-use DeepL\Translator;
+use DeepL\DeepLClient;
 
 trait Deepl
 {
     public function deeplTranslateAll()
     {
-        $translator = new Translator(config('services.deepl.api_key'));
-
         $currentLang = config('app.locale');
         $languages = config('app.locales');
 
@@ -18,6 +16,7 @@ trait Deepl
         foreach ($this->translatable as $field) {
             $translations = [];
             foreach ($filteredLanguages as $lang) {
+                $translator = new DeepLClient(config('services.deepl.api_key'));
                 $result = $translator->translateText(
                     $this->getTranslation($field, $currentLang),
                     $currentLang,
