@@ -2,7 +2,8 @@
 
 namespace Concept7\FilamentDeeplTranslations\Actions;
 
-use DeepL\Translator;
+use DeepL\AppInfo;
+use DeepL\DeepLClient;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Placeholder;
@@ -48,7 +49,8 @@ class DeeplTranslatableAction
                                     $sourceText = $model->getTranslation($fieldName, $state);
                                     $set($fieldName.'_original', $sourceText);
 
-                                    $translator = new Translator(config('services.deepl.api_key'));
+                                    $options = ['app_info' => new AppInfo('filament-deepl-translations', config('filament-deepl-translations.version'))];
+                                    $translator = new DeepLClient(config('services.deepl.api_key'), $options);
                                     $result = $translator->translateText(
                                         $sourceText,
                                         $get('source'),
