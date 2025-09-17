@@ -4,47 +4,64 @@ namespace Concept7\FilamentDeeplTranslations\Actions;
 
 use DeepL\AppInfo;
 use DeepL\DeepLClient;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Forms\Components\TextInput;
+
+use Filament\Schemas\Components\Form;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
 
 class DeeplTranslatableAction
 {
     public static function make(): void
     {
         Field::macro('translatable', function () {
+            /** @var Field $this */
+            $component = $this;
+
             $langs = collect(config('app.locales'))
                 ->mapWithKeys(fn (string $lang) => [$lang => $lang])
                 ->map(fn (string $lang) => locale_get_display_name($lang, config('app.locale')));
 
-            /** @var \Filament\Forms\Components\Field $this */
-            return $this->hintAction(
-                function (Field $component, $livewire) use ($langs) {
-                    $fieldName = $component->getName();
+            return $component->hintAction(
+                Action::make('google_translate')
+                    ->icon('heroicon-o-language')
+                    ->label(__('filament-deepl-translations::filament-deepl-translations.modal_title'))
+                    ->visible(function ($livewire) use ($component) {
+                        $model = $livewire->record;
+                        $fieldName = $component->getName();
 
-                    $model = $livewire->record;
+                        return $model && property_exists($model, 'translatable') && in_array($fieldName, $model->translatable);
+                    })
+                    ->mountUsing(function( Schema $form ) use ($component){
+                        $fieldName = $component->getName();
+//                        \Illuminate\Log\log()->info($form);
+                        $form->fill([
+                            $fieldName.'_original' => '',
+                            $fieldName.'_translated' => '',
+                        ]);
+                    })
+                    ->schema(function ($livewire) use ($langs, $component) {
+                        $fieldName = $component->getName();
+                        $model = $livewire->record;
+                        $activeLocale = $livewire->activeLocale;
 
-                    if (is_null($model) || ! in_array($fieldName, $model->translatable)) {
-                        return null;
-                    }
-
-                    $activeLocale = $livewire->activeLocale;
-
-                    return Action::make('google_translate')
-                        ->icon('heroicon-o-language')
-                        ->label(__('filament-deepl-translations::filament-deepl-translations.modal_title'))
-                        ->form([
-                            Placeholder::make('activeLocale')
+                        return [
+                            TextInput::make('activeLocale')
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.active_locale'))
-                                ->content(locale_get_display_name($activeLocale, config('app.locale'))),
+                                ->default(locale_get_display_name($activeLocale, config('app.locale')))
+                                ->disabled(),
                             Select::make('source')
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.source'))
-                                ->options(fn () => $langs->toArray())
+                                ->options($langs->toArray())
                                 ->live()
-                                ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) use ($fieldName, $model, $activeLocale): void {
+                                ->afterStateUpdated(function (Get $get, Set $set, ?string $state) use ($fieldName, $model, $activeLocale): void {
+                                    if (blank($state) || is_null($model)) {
+                                        return;
+                                    }
 
                                     $sourceText = $model->getTranslation($fieldName, $state);
                                     $set($fieldName.'_original', $sourceText);
@@ -54,26 +71,24 @@ class DeeplTranslatableAction
                                     $result = $translator->translateText(
                                         $sourceText,
                                         $get('source'),
-                                        $activeLocale === 'en' ? 'en-US' : $activeLocale,
-                                        [
-                                            'tag_handling' => 'html',
-                                        ]
+                                        $activeLocale === 'en' ? 'en-GB' : $activeLocale, // Note: en-US is often preferred by DeepL over 'en'
+                                        ['tag_handling' => 'html']
                                     );
 
                                     $set($fieldName.'_translated', $result->text);
                                 }),
-
                             ($component::class)::make($fieldName.'_original')
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.original_field', ['field' => __($fieldName)]))
                                 ->disabled()
                                 ->live(),
                             ($component::class)::make($fieldName.'_translated')
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.translated_field', ['field' => __($fieldName)])),
-                        ])
-                        ->action(function (array $data) use ($component, $fieldName): void {
-                            $component->state($data[$fieldName.'_translated']);
-                        });
-                }
+                        ];
+                    })
+                    ->action(function (array $data) use ($component): void {
+                        $fieldName = $component->getName();
+                        $component->state($data[$fieldName.'_translated']);
+                    })
             );
         });
     }

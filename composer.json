@@ -21,9 +21,11 @@
         "filament/forms": "^4.0",
         "filament/tables": "^4.0",
         "illuminate/contracts": "^10.0||^11.0||^12.0",
-        "spatie/laravel-package-tools": "^1.16"
+        "spatie/laravel-package-tools": "^1.16",
+        "ext-intl": "*"
     },
     "require-dev": {
+        "filament/upgrade": "^4.0",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.22",
         "nunomaduro/collision": "^8.1",
