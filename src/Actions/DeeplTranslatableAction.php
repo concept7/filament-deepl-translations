@@ -38,7 +38,6 @@ class DeeplTranslatableAction
                     })
                     ->mountUsing(function( Schema $form ) use ($component){
                         $fieldName = $component->getName();
-//                        \Illuminate\Log\log()->info($form);
                         $form->fill([
                             $fieldName.'_original' => '',
                             $fieldName.'_translated' => '',
