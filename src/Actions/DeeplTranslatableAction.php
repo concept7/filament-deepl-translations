@@ -10,6 +10,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 
 use Filament\Schemas\Components\Form;
+
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -36,13 +37,6 @@ class DeeplTranslatableAction
 
                         return $model && property_exists($model, 'translatable') && in_array($fieldName, $model->translatable);
                     })
-                    ->mountUsing(function( Schema $form ) use ($component){
-                        $fieldName = $component->getName();
-                        $form->fill([
-                            $fieldName.'_original' => '',
-                            $fieldName.'_translated' => '',
-                        ]);
-                    })
                     ->schema(function ($livewire) use ($langs, $component) {
                         $fieldName = $component->getName();
                         $model = $livewire->record;
@@ -61,7 +55,6 @@ class DeeplTranslatableAction
                                     if (blank($state) || is_null($model)) {
                                         return;
                                     }
-
                                     $sourceText = $model->getTranslation($fieldName, $state);
                                     $set($fieldName.'_original', $sourceText);
 
@@ -74,6 +67,7 @@ class DeeplTranslatableAction
                                         ['tag_handling' => 'html']
                                     );
 
+
                                     $set($fieldName.'_translated', $result->text);
                                 }),
                             ($component::class)::make($fieldName.'_original')
@@ -81,12 +75,15 @@ class DeeplTranslatableAction
                                 ->disabled()
                                 ->live(),
                             ($component::class)::make($fieldName.'_translated')
-                                ->label(__('filament-deepl-translations::filament-deepl-translations.translated_field', ['field' => __($fieldName)])),
+                                ->label(__('filament-deepl-translations::filament-deepl-translations.translated_field', ['field' => __($fieldName)]))
+                                ->extraAttributes(['style' => 'min-height: 200px;']),
                         ];
                     })
-                    ->action(function (array $data) use ($component): void {
+                    ->action(function (array $data, Set $set) use ($component): void {
                         $fieldName = $component->getName();
-                        $component->state($data[$fieldName.'_translated']);
+
+                        // This is the correct way to update the field's state
+                        $set($fieldName, $data[$fieldName.'_translated']);
                     })
             );
         });
