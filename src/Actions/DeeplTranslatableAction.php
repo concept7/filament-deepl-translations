@@ -8,12 +8,8 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-
-use Filament\Schemas\Components\Form;
-
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
-use Filament\Schemas\Schema;
 
 class DeeplTranslatableAction
 {
@@ -66,7 +62,6 @@ class DeeplTranslatableAction
                                         $activeLocale === 'en' ? 'en-GB' : $activeLocale, // Note: en-US is often preferred by DeepL over 'en'
                                         ['tag_handling' => 'html']
                                     );
-
 
                                     $set($fieldName.'_translated', $result->text);
                                 }),
