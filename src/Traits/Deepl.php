@@ -2,13 +2,15 @@
 
 namespace Concept7\FilamentDeeplTranslations\Traits;
 
-use DeepL\Translator;
+use DeepL\AppInfo;
+use DeepL\DeepLClient;
 
 trait Deepl
 {
     public function deeplTranslateAll()
     {
-        $translator = new Translator(config('services.deepl.api_key'));
+        $options = ['app_info' => new AppInfo('filament-deepl-translations', config('filament-deepl-translations.version'))];
+        $translator = new DeepLClient(config('services.deepl.api_key'), $options);
 
         $currentLang = config('app.locale');
         $languages = config('app.locales');

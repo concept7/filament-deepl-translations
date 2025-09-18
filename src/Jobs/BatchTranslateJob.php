@@ -26,7 +26,7 @@ class BatchTranslateJob implements ShouldQueue
     public function handle()
     {
         $this->records->each(function (Model $record) {
-            TranslateJob::dispatch($record, $this->sourceLanguage, $this->targetLanguage);
+            dispatch(new TranslateJob($record, $this->sourceLanguage, $this->targetLanguage));
         });
     }
 }
