@@ -3,10 +3,10 @@
 namespace Concept7\FilamentDeeplTranslations\Actions;
 
 use Concept7\FilamentDeeplTranslations\Jobs\BatchTranslateJob;
+use Filament\Actions\BulkAction;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Forms\Components\Select;
 use Filament\Support\Facades\FilamentIcon;
-use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
 
 class DeeplBulkTranslatableAction extends BulkAction
@@ -36,7 +36,7 @@ class DeeplBulkTranslatableAction extends BulkAction
 
         $this->modalIcon(FilamentIcon::resolve('actions::deepl-action.modal') ?? 'heroicon-o-x-mark');
 
-        $this->form(function ($livewire) {
+        $this->schema(function ($livewire) {
             $activeLocale = $livewire->activeLocale;
             $langs = collect(config('app.locales'))
                 ->mapWithKeys(fn (string $lang) => [$lang => $lang])
