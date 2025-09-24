@@ -37,6 +37,7 @@ class DeeplTranslatableAction
                         $fieldName = $component->getName();
                         $model = $livewire->record;
                         $activeLocale = $livewire->activeLocale;
+
                         return [
                             TextInput::make('activeLocale')
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.active_locale'))
@@ -69,7 +70,7 @@ class DeeplTranslatableAction
                                 ->disabled()
                                 ->live(),
                             ($component::class)::make($fieldName.'_translated')
-                                ->label(__('filament-deepl-translations::filament-deepl-translations.translated_field', ['field' => __($fieldName)]))
+                                ->label(__('filament-deepl-translations::filament-deepl-translations.translated_field', ['field' => __($fieldName)])),
                         ];
                     })
                     ->action(function (array $data) use ($component): void {
