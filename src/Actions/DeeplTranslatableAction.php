@@ -15,7 +15,9 @@ class DeeplTranslatableAction
 {
     public static function make(): void
     {
-        Field::macro('translatable', function (Field $component) {
+        Field::macro('translatable', function () {
+            /** @var Field $component */
+            $component = $this; // the current field instance
 
             $langs = collect(config('app.locales'))
                 ->mapWithKeys(fn (string $lang) => [$lang => $lang])
@@ -35,7 +37,6 @@ class DeeplTranslatableAction
                         $fieldName = $component->getName();
                         $model = $livewire->record;
                         $activeLocale = $livewire->activeLocale;
-
                         return [
                             TextInput::make('activeLocale')
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.active_locale'))
@@ -69,14 +70,11 @@ class DeeplTranslatableAction
                                 ->live(),
                             ($component::class)::make($fieldName.'_translated')
                                 ->label(__('filament-deepl-translations::filament-deepl-translations.translated_field', ['field' => __($fieldName)]))
-                                ->extraAttributes(['style' => 'min-height: 200px;']),
                         ];
                     })
-                    ->action(function (array $data, Set $set) use ($component): void {
+                    ->action(function (array $data) use ($component): void {
                         $fieldName = $component->getName();
-
-                        // This is the correct way to update the field's state
-                        $set($fieldName, $data[$fieldName.'_translated']);
+                        $component->state($data[$fieldName.'_translated']);
                     })
             );
         });
