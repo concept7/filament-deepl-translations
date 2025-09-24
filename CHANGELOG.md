@@ -2,6 +2,15 @@
 
 All notable changes to `filament-deepl-translations` will be documented in this file.
 
+## 0.0.8 - 2025-09-24
+
+### What's Changed
+
+* fixed-translation-not-working by @jurnskie in https://github.com/concept7/filament-deepl-translations/pull/10
+* Release by @mwagena in https://github.com/concept7/filament-deepl-translations/pull/11
+
+**Full Changelog**: https://github.com/concept7/filament-deepl-translations/compare/0.0.7...0.0.8
+
 ## 0.0.7 - 2025-09-18
 
 ### What's Changed
