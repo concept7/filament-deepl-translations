@@ -15,9 +15,7 @@ class DeeplTranslatableAction
 {
     public static function make(): void
     {
-        Field::macro('translatable', function () {
-            /** @var Field $this */
-            $component = $this;
+        Field::macro('translatable', function (Field $component) {
 
             $langs = collect(config('app.locales'))
                 ->mapWithKeys(fn (string $lang) => [$lang => $lang])

@@ -10,9 +10,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Concept7\FilamentDeeplTranslations\Contracts\Translatable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ */
 class TranslateJob implements ShouldQueue
 {
     use Dispatchable;
@@ -21,6 +24,9 @@ class TranslateJob implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
+        /**
+         * @var Model&Translatable $record
+         */
         private Model $record,
         private string $sourceLanguage,
         private string $targetLanguage
@@ -31,7 +37,9 @@ class TranslateJob implements ShouldQueue
         $options = ['app_info' => new AppInfo('filament-deepl-translations', config('filament-deepl-translations.version'))];
         $translator = new DeepLClient(config('services.deepl.api_key'), $options);
 
-        $fields = $this->record->translatable;
+        /** @var Model&Translatable&object{translatable:list<string>} $record */
+        $record = $this->record;
+        $fields = $record->translatable;
 
         foreach ($fields as $field) {
             $texts = $this->record->getTranslation($field, $this->sourceLanguage);
