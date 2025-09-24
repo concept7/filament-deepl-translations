@@ -2,6 +2,7 @@
 
 namespace Concept7\FilamentDeeplTranslations\Jobs;
 
+use Concept7\FilamentDeeplTranslations\Contracts\Translatable;
 use Concept7\FilamentDeeplTranslations\Events\RecordLanguageUpdatedEvent;
 use DeepL\AppInfo;
 use DeepL\DeepLClient;
@@ -10,12 +11,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Concept7\FilamentDeeplTranslations\Contracts\Translatable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-/**
- */
 class TranslateJob implements ShouldQueue
 {
     use Dispatchable;
