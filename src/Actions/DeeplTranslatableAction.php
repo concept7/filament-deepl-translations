@@ -8,19 +8,16 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-
-use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
-use Filament\Schemas\Schema;
 
 class DeeplTranslatableAction
 {
     public static function make(): void
     {
         Field::macro('translatable', function () {
-            /** @var Field $this */
-            $component = $this;
+            /** @var Field $component */
+            $component = $this; // the current field instance
 
             $langs = collect(config('app.locales'))
                 ->mapWithKeys(fn (string $lang) => [$lang => $lang])
@@ -35,13 +32,6 @@ class DeeplTranslatableAction
                         $fieldName = $component->getName();
 
                         return $model && property_exists($model, 'translatable') && in_array($fieldName, $model->translatable);
-                    })
-                    ->mountUsing(function( Schema $form ) use ($component){
-                        $fieldName = $component->getName();
-                        $form->fill([
-                            $fieldName.'_original' => '',
-                            $fieldName.'_translated' => '',
-                        ]);
                     })
                     ->schema(function ($livewire) use ($langs, $component) {
                         $fieldName = $component->getName();
@@ -61,7 +51,6 @@ class DeeplTranslatableAction
                                     if (blank($state) || is_null($model)) {
                                         return;
                                     }
-
                                     $sourceText = $model->getTranslation($fieldName, $state);
                                     $set($fieldName.'_original', $sourceText);
 

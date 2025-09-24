@@ -2,6 +2,7 @@
 
 namespace Concept7\FilamentDeeplTranslations\Jobs;
 
+use Concept7\FilamentDeeplTranslations\Contracts\Translatable;
 use Concept7\FilamentDeeplTranslations\Events\RecordLanguageUpdatedEvent;
 use DeepL\AppInfo;
 use DeepL\DeepLClient;
@@ -21,6 +22,9 @@ class TranslateJob implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
+        /**
+         * @var Model&Translatable $record
+         */
         private Model $record,
         private string $sourceLanguage,
         private string $targetLanguage
@@ -31,7 +35,9 @@ class TranslateJob implements ShouldQueue
         $options = ['app_info' => new AppInfo('filament-deepl-translations', config('filament-deepl-translations.version'))];
         $translator = new DeepLClient(config('services.deepl.api_key'), $options);
 
-        $fields = $this->record->translatable;
+        /** @var Model&Translatable&object{translatable:list<string>} $record */
+        $record = $this->record;
+        $fields = $record->translatable;
 
         foreach ($fields as $field) {
             $texts = $this->record->getTranslation($field, $this->sourceLanguage);

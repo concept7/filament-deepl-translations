@@ -10,3 +10,8 @@ parameters:
     tmpDir: build/phpstan
     checkOctaneCompatibility: true
     checkModelProperties: true
+    ignoreErrors:
+        -
+            message: '#Trait Concept7\\FilamentDeeplTranslations\\Traits\\Deepl is used zero times and is not analysed#'
+            paths:
+                - src/Traits/Deepl.php
