@@ -15,7 +15,11 @@ return [
     'multiple' => [
         'label' => 'Vertalen met DeepL',
         'modal' => [
-            'heading' => 'Overschrijf alle vertalingen',
+            'heading' => 'Vertalen met DeepL',
+        ],
+        'only_untranslated' => [
+            'label' => 'Alleen niet-vertaalde records vertalen',
+            'helper' => 'Records die al een vertaling in de doeltaal hebben, worden overgeslagen zodat bestaande (handmatige) vertalingen behouden blijven.',
         ],
         'notifications' => [
             'title' => 'Content is verzonden naar DeepL en worden in de achtergrond verwerkt.',

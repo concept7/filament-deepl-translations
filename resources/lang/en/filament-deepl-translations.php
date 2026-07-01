@@ -15,7 +15,11 @@ return [
     'multiple' => [
         'label' => 'Translate with DeepL',
         'modal' => [
-            'heading' => 'Overwrite all translations',
+            'heading' => 'Translate with DeepL',
+        ],
+        'only_untranslated' => [
+            'label' => 'Only translate untranslated records',
+            'helper' => 'Records that already have a translation in the target language are skipped, preserving existing (manual) translations.',
         ],
         'notifications' => [
             'title' => 'Content sent to DeepL and will be processed in the background.',

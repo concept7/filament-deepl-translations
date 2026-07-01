@@ -27,11 +27,16 @@ class TranslateJob implements ShouldQueue
          */
         private Model $record,
         private string $sourceLanguage,
-        private string $targetLanguage
+        private string $targetLanguage,
+        private bool $onlyUntranslated = false
     ) {}
 
     public function handle()
     {
+        if ($this->onlyUntranslated && $this->hasExistingTranslation()) {
+            return;
+        }
+
         $options = ['app_info' => new AppInfo('filament-deepl-translations', config('filament-deepl-translations.version'))];
         $translator = new DeepLClient(config('services.deepl.api_key'), $options);
 
@@ -60,5 +65,19 @@ class TranslateJob implements ShouldQueue
         $this->record->save();
 
         event(new RecordLanguageUpdatedEvent($this->record, $this->targetLanguage));
+    }
+
+    private function hasExistingTranslation(): bool
+    {
+        /** @var Model&Translatable&object{translatable: list<string>} $record */
+        $record = $this->record;
+
+        foreach ($record->translatable as $field) {
+            if (filled($record->getTranslation($field, $this->targetLanguage, false))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

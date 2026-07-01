@@ -15,7 +15,7 @@ interface Translatable
     /**
      * @return string
      */
-    public function getTranslation(string $key, string $locale);
+    public function getTranslation(string $key, string $locale, bool $useFallbackLocale = true);
 
     /**
      * @return static
