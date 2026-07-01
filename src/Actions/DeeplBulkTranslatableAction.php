@@ -5,6 +5,7 @@ namespace Concept7\FilamentDeeplTranslations\Actions;
 use Concept7\FilamentDeeplTranslations\Jobs\BatchTranslateJob;
 use Filament\Actions\BulkAction;
 use Filament\Actions\Concerns\CanCustomizeProcess;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Select;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Database\Eloquent\Collection;
@@ -50,12 +51,16 @@ class DeeplBulkTranslatableAction extends BulkAction
                 Select::make('target')
                     ->label(__('filament-deepl-translations::filament-deepl-translations.target'))
                     ->options($langs),
+                Checkbox::make('only_untranslated')
+                    ->label(__('filament-deepl-translations::filament-deepl-translations.multiple.only_untranslated.label'))
+                    ->helperText(__('filament-deepl-translations::filament-deepl-translations.multiple.only_untranslated.helper'))
+                    ->default(true),
             ];
         });
 
         $this->action(function (array $data): void {
             $this->process(function (Collection $records) use ($data): void {
-                BatchTranslateJob::dispatch($records, $data['source'], $data['target']);
+                BatchTranslateJob::dispatch($records, $data['source'], $data['target'], (bool) ($data['only_untranslated'] ?? true));
             });
 
             $this->success();
