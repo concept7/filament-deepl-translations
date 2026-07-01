@@ -69,7 +69,7 @@ class TranslateJob implements ShouldQueue
 
     private function hasExistingTranslation(): bool
     {
-        /** @var \Illuminate\Database\Eloquent\Model&\Concept7\FilamentDeeplTranslations\Contracts\Translatable&object{translatable: list<string>} $record */
+        /** @var Model&Translatable&object{translatable: list<string>} $record */
         $record = $this->record;
 
         foreach ($record->translatable as $field) {
