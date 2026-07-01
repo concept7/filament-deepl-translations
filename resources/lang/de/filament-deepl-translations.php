@@ -15,7 +15,11 @@ return [
     'multiple' => [
         'label' => 'Translate with DeepL',
         'modal' => [
-            'heading' => 'Overwrite all translations',
+            'heading' => 'Mit DeepL übersetzen',
+        ],
+        'only_untranslated' => [
+            'label' => 'Nur nicht übersetzte Datensätze übersetzen',
+            'helper' => 'Datensätze, die bereits eine Übersetzung in der Zielsprache haben, werden übersprungen, sodass vorhandene (manuelle) Übersetzungen erhalten bleiben.',
         ],
         'notifications' => [
             'title' => 'Content sent to DeepL and will be processed in the background.',
