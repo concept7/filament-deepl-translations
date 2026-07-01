@@ -60,7 +60,7 @@ class DeeplBulkTranslatableAction extends BulkAction
 
         $this->action(function (array $data): void {
             $this->process(function (Collection $records) use ($data): void {
-                BatchTranslateJob::dispatch($records, $data['source'], $data['target'], (bool) ($data['only_untranslated'] ?? true));
+                BatchTranslateJob::dispatch($records, $data['source'], $data['target'], (bool) data_get($data, 'only_untranslated', true));
             });
 
             $this->success();
