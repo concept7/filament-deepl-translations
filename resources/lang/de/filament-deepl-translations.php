@@ -12,6 +12,7 @@ return [
     'success_message' => 'Content has been translated successfully.',
     'error_title' => 'Error!',
     'error_message' => 'Content could not be translated.',
+    'blank_source' => 'Kein Text in dieser Ausgangssprache',
     'multiple' => [
         'label' => 'Translate with DeepL',
         'modal' => [

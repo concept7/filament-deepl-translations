@@ -8,6 +8,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 
@@ -52,6 +53,13 @@ class DeeplTranslatableAction
                                         return;
                                     }
                                     $sourceText = $model->getTranslation($fieldName, $state);
+
+                                    if (DeeplTranslatableAction::isBlankSource($sourceText)) {
+                                        DeeplTranslatableAction::notifyBlankSource();
+
+                                        return;
+                                    }
+
                                     $set($fieldName.'_original', $sourceText);
 
                                     $options = ['app_info' => new AppInfo('filament-deepl-translations', config('filament-deepl-translations.version'))];
@@ -79,5 +87,28 @@ class DeeplTranslatableAction
                     })
             );
         });
+    }
+
+    /**
+     * A source is blank when it holds no visible text once markup, whitespace and
+     * non-breaking spaces are stripped (e.g. '', '<p></p>', '<p>&nbsp;</p>').
+     */
+    public static function isBlankSource(mixed $text): bool
+    {
+        if (! is_string($text)) {
+            return blank($text);
+        }
+
+        $plain = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5);
+
+        return trim(str_replace("\u{00A0}", ' ', $plain)) === '';
+    }
+
+    public static function notifyBlankSource(): void
+    {
+        Notification::make()
+            ->warning()
+            ->title(__('filament-deepl-translations::filament-deepl-translations.blank_source'))
+            ->send();
     }
 }

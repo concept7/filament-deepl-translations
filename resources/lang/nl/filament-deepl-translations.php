@@ -12,6 +12,7 @@ return [
     'success_message' => 'Content is vertaald.',
     'error_title' => 'Error!',
     'error_message' => 'Content kon niet vertaald worden.',
+    'blank_source' => 'Geen tekst in deze brontaal',
     'multiple' => [
         'label' => 'Vertalen met DeepL',
         'modal' => [
