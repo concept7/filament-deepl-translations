@@ -54,8 +54,8 @@ class DeeplTranslatableAction
                                     }
                                     $sourceText = $model->getTranslation($fieldName, $state);
 
-                                    if (self::isBlankSource($sourceText)) {
-                                        self::notifyBlankSource();
+                                    if (DeeplTranslatableAction::isBlankSource($sourceText)) {
+                                        DeeplTranslatableAction::notifyBlankSource();
 
                                         return;
                                     }
